@@ -1,0 +1,72 @@
+@import "tailwindcss";
+:root {
+  --rich-black: #0d1b2aff;
+  --oxford-blue: #1b263bff;
+  --yinmn-blue: #415a77ff;
+  --silver-lake-blue: #778da9ff;
+  --platinum: #e0e1ddff;
+  --night: #0b090aff;
+  --eerie-black: #161a1dff;
+  --blood-red: #660708ff;
+  --cornell-red: #a4161aff;
+  --cornell-red-2: #ba181bff;
+  --imperial-red: #e5383bff;
+  --silver: #b1a7a6ff;
+  --timberwolf: #d3d3d3ff;
+  --white-smoke: #f5f3f4ff;
+  --white: #ffffffff;
+}
+
+/* All pages */
+body {
+  background-color: var(--white-smoke);
+  font-family: JetBrains Mono;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--platinum);
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  list-style: none;
+}
+.nav ul,
+.nav li {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 15px 25px;
+  margin: 5px;
+}
+.nav a {
+  display: flex;
+  color: var(--oxford-blue);
+  flex-direction: row;
+  padding: 10px;
+  border-radius: 10px;
+  list-style: none;
+}
+.nav .logo {
+  display: flex;
+  position: relative;
+  width: 120px;
+  height: 100px;
+  align-self: self-start;
+}
+
+.nav:hover {
+  background-color: var(--timberwolf);
+}
+.nav:hover a:hover {
+  color: var(--yinmn-blue);
+}
+
+h1 {
+  color: var(--rich-black);
+}
+
+/*# sourceMappingURL=index.css.map */
