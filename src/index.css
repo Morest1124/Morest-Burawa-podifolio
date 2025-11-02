@@ -1,72 +1,134 @@
 @import "tailwindcss";
+
 :root {
-  --rich-black: #0d1b2aff;
-  --oxford-blue: #1b263bff;
-  --yinmn-blue: #415a77ff;
-  --silver-lake-blue: #778da9ff;
-  --platinum: #e0e1ddff;
-  --night: #0b090aff;
-  --eerie-black: #161a1dff;
-  --blood-red: #660708ff;
-  --cornell-red: #a4161aff;
-  --cornell-red-2: #ba181bff;
-  --imperial-red: #e5383bff;
-  --silver: #b1a7a6ff;
-  --timberwolf: #d3d3d3ff;
-  --white-smoke: #f5f3f4ff;
-  --white: #ffffffff;
+  /* Accent palette: Warm Blonde / Amber */
+  --accent: #FFD66B; /* warm blonde accent */
+  --accent-soft: rgba(255,214,107,0.12);
+  --accent-glow: rgba(255,214,107,0.95);
+  --accent-muted: #C89A2E;
+  --bg-black: #000000;
+  --text-color: #E6E6E6;
 }
 
 /* All pages */
 body {
-  background-color: var(--white-smoke);
-  font-family: JetBrains Mono;
+  background-color: var(--bg-black);
+  color: var(--text-color);
+  font-family: 'Qurova', 'Goote', JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  /* keep content below the fixed navbar */
+  padding-top: 96px;
 }
 
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--platinum);
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  list-style: none;
+/* Ensure anchors and form text use readable text color */
+a, a:visited, button, input, textarea, label {
+  color: var(--text-color) !important;
 }
-.nav ul,
-.nav li {
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-  padding: 15px 25px;
-  margin: 5px;
+
+/* Make nav link text inherit the primary text color (overrides Tailwind utilities) */
+.nav-link, .nav-link .label, .nav-link .icon, .label, h1, p, li, span {
+  color: var(--text-color) !important;
 }
-.nav a {
-  display: flex;
-  color: var(--oxford-blue);
-  flex-direction: row;
-  padding: 10px;
-  border-radius: 10px;
-  list-style: none;
+
+/* enable smooth behavior for anchor navigation as a fallback */
+html {
+  scroll-behavior: smooth;
 }
-.nav .logo {
-  display: flex;
+
+/* small compatibility styles used alongside Tailwind utility classes in JSX */
+.nav { position: fixed; top: 12px; left: 12px; right: 12px; z-index: 60; }
+
+.nav .logo-orbit { background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 4px; }
+.nav .orb { transform-origin: center center; }
+.nav .ring { transform-origin: center center; animation: orbit 6s linear infinite; }
+
+/* make orb and ring brighter and glow on dark backgrounds */
+.nav .orb .orb-core,
+.nav .orb .orb-core,
+.nav .orb-core {
+  filter: drop-shadow(0 0 10px var(--accent-glow)) drop-shadow(0 0 20px rgba(255,214,107,0.5));
+  mix-blend-mode: screen;
+}
+.nav .ring {
+  stroke: rgba(255,214,107,0.28);
+  filter: drop-shadow(0 0 8px rgba(255,214,107,0.9)) drop-shadow(0 0 18px rgba(255,214,107,0.55));
+}
+
+@keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.nav-items { display: flex; gap: 8px; align-items: center; margin: 0; padding: 0; list-style: none; }
+.nav-item { list-style: none; }
+
+.nav-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-color); padding: 8px 12px; border-radius: 10px; text-decoration: none; font-weight: 600; position: relative; transition: transform 160ms ease, box-shadow 160ms ease, color 160ms ease; }
+.nav-link .icon svg { display: block; }
+.nav-link .label { display: inline-block; font-size: 0.92rem; }
+.nav-link:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(255,214,107,0.06); }
+.nav .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text-color); text-decoration: none; }
+.nav-link.active { color: var(--text-color); background: linear-gradient(90deg, rgba(255,214,107,0.14), rgba(255,240,177,0.06)); box-shadow: 0 8px 30px rgba(255,214,107,0.12), inset 0 -1px 0 rgba(255,255,255,0.02); }
+.nav-link .pulse { position: absolute; right: -6px; top: -6px; width: 10px; height: 10px; border-radius: 999px; background: linear-gradient(90deg,#FFD66B88,#FFE0A088); opacity: 0; transform: scale(0.6); transition: opacity 220ms ease, transform 220ms ease; }
+.nav-link.active .pulse { opacity: 1; transform: scale(1); }
+
+/* Responsive: collapse labels on small screens */
+@media (max-width: 640px) { .nav { padding: 10px; } .nav-link .label { display: none; } .nav .logo { margin-right: 6px; } }
+
+h1 { color: var(--text-color); }
+
+/* Project card content area scroll and hover styles */
+.content-area::-webkit-scrollbar { height: 8px; width: 8px; }
+.content-area::-webkit-scrollbar-thumb { background: rgba(255,214,107,0.14); border-radius: 8px; }
+.content-area { overflow: auto; }
+
+.group:hover { transform: translateY(-4px); }
+.group { transition: transform 180ms ease, box-shadow 180ms ease; }
+
+/* make sure the reveal link is reachable on keyboard focus */
+.group a:focus { outline: 2px solid rgba(255,214,107,0.24); outline-offset: 2px; }
+
+/* Utility classes that map to the accent palette (used by JSX components) */
+.bg-accent-soft { background: var(--accent-soft) !important; }
+.border-accent { border-color: rgba(255,214,107,0.06) !important; }
+.shadow-accent { box-shadow: 0 8px 30px rgba(255,214,107,0.06) !important; }
+.btn-accent { background: var(--accent-soft); }
+.btn-accent:hover { background: rgba(255,214,107,0.18); }
+.dot-accent { background: var(--accent); }
+
+/* Highlight (blonde) style used in Services heading */
+.highlight-blonde {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(255,214,107,0.16), rgba(255,240,177,0.06));
+  padding: 0 0.35rem;
+  border-radius: 6px;
+  color: #111;
+  box-shadow: 0 8px 30px rgba(255,214,107,0.06);
   position: relative;
-  width: 120px;
-  height: 100px;
-  align-self: self-start;
+  overflow: hidden;
+}
+.highlight-blonde::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+  transform: skewX(-12deg);
+  animation: shimmer 2.8s linear infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+@keyframes shimmer { to { left: 140%; } }
+
+
+/* Modal styles for project details */
+.modal-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.85)); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.modal-dialog { box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+.modal-close { color: var(--accent); }
+
+/* Reveal animation for sections and elements */
+.reveal { opacity: 0; transform: translateY(18px) scale(0.995); transition: opacity 520ms cubic-bezier(.2,.9,.2,1), transform 520ms cubic-bezier(.2,.9,.2,1); }
+.reveal.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+/* reduce motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .group, .nav-link { transition: none !important; }
 }
 
-.nav:hover {
-  background-color: var(--timberwolf);
-}
-.nav:hover a:hover {
-  color: var(--yinmn-blue);
-}
-
-h1 {
-  color: var(--rich-black);
-}
-
-/*# sourceMappingURL=index.css.map */
