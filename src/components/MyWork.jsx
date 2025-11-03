@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { ALL_PROJECTS } from "../data/projects";
 import Img from "./Img";
+import Lightbox from "./Lightbox";
 
 const CATEGORIES = [
   { id: "all", label: "All" },
@@ -9,7 +10,7 @@ const CATEGORIES = [
   { id: "design", label: "Graphic Design" },
 ];
 
-function ProjectCard({ p, onOpen }) {
+function ProjectCard({ p, onOpen, onOpenLightbox }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const intervalRef = useRef(null);
@@ -43,16 +44,27 @@ function ProjectCard({ p, onOpen }) {
     >
       <div className="w-full h-40 sm:h-44 lg:h-36 bg-black/20 overflow-hidden relative">
         {images.map((src, i) => (
-          <Img
+          <div
             key={src}
-            src={src}
-            alt={`${p.title} ${i + 1}`}
-            loading="lazy"
-            className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-700 ease-out ${
+            role="button"
+            tabIndex={0}
+            onClick={() => onOpenLightbox && onOpenLightbox(images, i, p.title)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onOpenLightbox && onOpenLightbox(images, i, p.title);
+            }}
+            aria-label={`Open full image ${i + 1} for ${p.title}`}
+            className={`absolute inset-0 block w-full h-full ${
               i === index ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            } transition-opacity duration-700 ease-out cursor-zoom-in`}
             style={{ transformOrigin: "center" }}
-          />
+          >
+            <Img
+              src={src}
+              alt={`${p.title} ${i + 1}`}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          </div>
         ))}
 
         {/* Prev / Next controls (visible on hover) */}
@@ -88,11 +100,23 @@ function ProjectCard({ p, onOpen }) {
             </div>
           </>
         )}
+
+        {/* info button - navigate to project details */}
+        <button
+          onClick={() => {
+            const slug = p.slug || p.id;
+            window.location.hash = `project-${slug}`;
+          }}
+          aria-label={`Open full details for ${p.title}`}
+          className="absolute right-2 top-2 z-20 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+        >
+          ℹ️
+        </button>
       </div>
 
-      <div className="p-4 max-h-36 sm:max-h-44 overflow-auto content-area">
+      <div className="p-4 max-h-52 sm:max-h-60 overflow-auto content-area">
         <h3 className="font-semibold text-lg">{p.title}</h3>
-        <p className="mt-2 text-sm">{p.desc}</p>
+        <p className="mt-2 text-sm">{p.caseStudy || p.designUseCase || p.desc}</p>
       </div>
 
       <button
@@ -111,6 +135,7 @@ export default function MyWork() {
   const [showMore, setShowMore] = useState(false);
   const [modalProject, setModalProject] = useState(null);
   const [modalIndex, setModalIndex] = useState(0);
+  const [lightbox, setLightbox] = useState(null); // { images, startIndex, title }
 
   const visibleProjects = useMemo(() => {
     const list = ALL_PROJECTS.filter((p) =>
@@ -129,10 +154,7 @@ export default function MyWork() {
       if (!modalProject) return;
       if (e.key === "Escape") setModalProject(null);
       if (e.key === "ArrowLeft")
-        setModalIndex(
-          (m) =>
-            (m - 1 + modalProject.images.length) % modalProject.images.length
-        );
+        setModalIndex((m) => (m - 1 + modalProject.images.length) % modalProject.images.length);
       if (e.key === "ArrowRight")
         setModalIndex((m) => (m + 1) % modalProject.images.length);
     }
@@ -146,15 +168,19 @@ export default function MyWork() {
     };
   }, [modalProject]);
 
+  // lock body scroll when lightbox is open
+  useEffect(() => {
+    if (lightbox) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+  }, [lightbox]);
+
   return (
     <section className="min-h-screen px-6 py-12">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold">My Work</h2>
-            <p className="mt-2">
-              Selected projects, case studies and links to live demos.
-            </p>
+            <p className="mt-2">Selected projects, case studies and links to live demos.</p>
           </div>
           <div className="hidden sm:flex items-center gap-4">
             <div className="text-sm opacity-70">Jump to:</div>
@@ -164,35 +190,13 @@ export default function MyWork() {
                   setActive("frontend");
                   setShowMore(false);
                 }}
-                className={`category-pill ${
-                  active === "frontend" ? "active" : ""
-                }`}
+                className={`category-pill ${active === "frontend" ? "active" : ""}`}
                 aria-pressed={active === "frontend"}
                 aria-label="Show front-end projects"
               >
-                <svg
-                  className="category-icon w-5 h-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden
-                >
-                  <rect
-                    x="3"
-                    y="5"
-                    width="18"
-                    height="12"
-                    rx="1"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    d="M7 3h10v2H7z"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg className="category-icon w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <rect x="3" y="5" width="18" height="12" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M7 3h10v2H7z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span className="ml-2">Front-end</span>
               </button>
@@ -202,37 +206,13 @@ export default function MyWork() {
                   setActive("backend");
                   setShowMore(false);
                 }}
-                className={`category-pill ${
-                  active === "backend" ? "active" : ""
-                }`}
+                className={`category-pill ${active === "backend" ? "active" : ""}`}
                 aria-pressed={active === "backend"}
                 aria-label="Show back-end projects"
               >
-                <svg
-                  className="category-icon w-5 h-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden
-                >
-                  <rect
-                    x="4"
-                    y="4"
-                    width="16"
-                    height="6"
-                    rx="1"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-                  <rect
-                    x="4"
-                    y="14"
-                    width="16"
-                    height="6"
-                    rx="1"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
+                <svg className="category-icon w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <rect x="4" y="4" width="16" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
+                  <rect x="4" y="14" width="16" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
                 </svg>
                 <span className="ml-2">Back-end</span>
               </button>
@@ -242,26 +222,12 @@ export default function MyWork() {
                   setActive("design");
                   setShowMore(false);
                 }}
-                className={`category-pill ${
-                  active === "design" ? "active" : ""
-                }`}
+                className={`category-pill ${active === "design" ? "active" : ""}`}
                 aria-pressed={active === "design"}
                 aria-label="Show design projects"
               >
-                <svg
-                  className="category-icon w-5 h-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden
-                >
-                  <path
-                    d="M12 2l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z"
-                    stroke="currentColor"
-                    strokeWidth="1.0"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg className="category-icon w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M12 2l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z" stroke="currentColor" strokeWidth="1.0" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span className="ml-2">Graphic Design</span>
               </button>
@@ -271,11 +237,7 @@ export default function MyWork() {
                   setActive("all");
                   setShowMore(false);
                 }}
-                className={`px-3 py-1 rounded-md font-medium transition ${
-                  active === "all"
-                    ? "bg-accent-soft"
-                    : "bg-black/20 hover:bg-black/10"
-                }`}
+                className={`px-3 py-1 rounded-md font-medium transition ${active === "all" ? "bg-accent-soft" : "bg-black/20 hover:bg-black/10"}`}
                 aria-pressed={active === "all"}
                 aria-label="Show all projects"
               >
@@ -313,15 +275,13 @@ export default function MyWork() {
                 setModalProject(proj);
                 setModalIndex(0);
               }}
+              onOpenLightbox={(images, startIndex, title) => setLightbox({ images, startIndex, title })}
             />
           ))}
         </div>
 
         <div className="mt-8 flex items-center justify-center gap-4">
-          <button
-            onClick={() => setShowMore((s) => !s)}
-            className="px-5 py-2 rounded-md font-semibold transition btn-accent"
-          >
+          <button onClick={() => setShowMore((s) => !s)} className="px-5 py-2 rounded-md font-semibold transition btn-accent">
             {showMore ? "Show less" : "Show more"}
           </button>
         </div>
@@ -339,35 +299,31 @@ export default function MyWork() {
           }}
         >
           <div className="modal-dialog relative w-full max-w-4xl bg-black/90 border border-accent rounded-lg overflow-hidden">
-            <button
-              onClick={() => setModalProject(null)}
-              aria-label="Close project"
-              className="modal-close absolute right-3 top-3 text-xl p-1 bg-black/30 rounded"
-            >
+            <button onClick={() => setModalProject(null)} aria-label="Close project" className="modal-close absolute right-3 top-3 text-xl p-1 bg-black/30 rounded">
               ✕
             </button>
 
             <div className="w-full h-64 sm:h-80 bg-black/20 relative">
               {modalProject.images.map((src, i) => (
-                <Img
+                <div
                   key={src}
-                  src={src}
-                  alt={`${modalProject.title} ${i + 1}`}
-                  loading="lazy"
-                  className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 ${
-                    i === modalIndex ? "opacity-100" : "opacity-0"
-                  }`}
-                />
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setLightbox({ images: modalProject.images, startIndex: i, title: modalProject.title })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") setLightbox({ images: modalProject.images, startIndex: i, title: modalProject.title });
+                  }}
+                  aria-label={`Open full image ${i + 1} for ${modalProject.title}`}
+                  className={`absolute inset-0 block w-full h-full transition-opacity duration-500 ${i === modalIndex ? "opacity-100" : "opacity-0"} cursor-zoom-in`}
+                >
+                  <Img src={src} alt={`${modalProject.title} ${i + 1}`} loading="lazy" className="w-full h-full object-cover" />
+                </div>
               ))}
 
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setModalIndex(
-                    (m) =>
-                      (m - 1 + modalProject.images.length) %
-                      modalProject.images.length
-                  );
+                  setModalIndex((m) => (m - 1 + modalProject.images.length) % modalProject.images.length);
                 }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-2"
                 aria-label="Previous image"
@@ -388,42 +344,30 @@ export default function MyWork() {
 
             <div className="p-6">
               <h3 className="text-2xl font-bold">{modalProject.title}</h3>
-              <p className="mt-3 text-sm">{modalProject.desc}</p>
+              <p className="mt-3 text-sm">{modalProject.caseStudy || modalProject.designUseCase || modalProject.desc}</p>
 
               <div className="mt-6 flex items-center gap-3">
-                <a
-                  href={
-                    modalProject.frontendLive ||
-                    modalProject.link ||
-                    modalProject.backendLive ||
-                    "#"
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 rounded btn-accent"
-                >
+                <a href={modalProject.frontendLive || modalProject.link || modalProject.backendLive || "#"} target="_blank" rel="noreferrer" className="px-4 py-2 rounded btn-accent">
                   Open Live
                 </a>
-                <button
-                  onClick={() => {
-                    // navigate to project detail using slug or id
-                    const slug = modalProject.slug || modalProject.id;
-                    window.location.hash = `project-${slug}`;
-                  }}
-                  className="px-4 py-2 rounded bg-black/20 ml-2"
-                >
+                <button onClick={() => { const slug = modalProject.slug || modalProject.id; window.location.hash = `project-${slug}`; }} className="px-4 py-2 rounded bg-black/20 ml-2">
                   Full details
                 </button>
-                <button
-                  onClick={() => setModalProject(null)}
-                  className="px-4 py-2 rounded bg-black/20"
-                >
-                  Close
-                </button>
+                <button onClick={() => setModalProject(null)} className="px-4 py-2 rounded bg-black/20">Close</button>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Lightbox overlay */}
+      {lightbox && (
+        <Lightbox
+          images={lightbox.images}
+          startIndex={lightbox.startIndex}
+          title={lightbox.title}
+          onClose={() => setLightbox(null)}
+        />
       )}
     </section>
   );
