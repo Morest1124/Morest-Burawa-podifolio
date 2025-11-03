@@ -16,7 +16,7 @@ export default function Lightbox({ images = [], startIndex = 0, title = "", onCl
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [index]);
+  }, []);
 
   function prev() {
     setIndex((i) => (i - 1 + images.length) % images.length);

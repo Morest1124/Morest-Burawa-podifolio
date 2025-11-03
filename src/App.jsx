@@ -47,6 +47,14 @@ function App() {
     });
     return () => obs.disconnect();
   }, []);
+
+  // Ensure any leftover body overflow lock is cleared on mount (fixes stuck no-scroll state)
+  useEffect(() => {
+    document.body.style.overflow = "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
   return (
     <>
       <Navbar />
