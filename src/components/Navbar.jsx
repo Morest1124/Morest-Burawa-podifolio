@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import BackgroundToggle from "./BackgroundToggle";
 
 const NAV_ITEMS = [
   {
@@ -170,10 +171,10 @@ export default function Navbar() {
   useEffect(() => {
     if (!navRef.current) return;
     // add flash class
-    navRef.current.classList.add('flash');
+    navRef.current.classList.add("flash");
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => {
-      navRef.current && navRef.current.classList.remove('flash');
+      navRef.current && navRef.current.classList.remove("flash");
     }, 520);
     return () => {
       if (flashTimer.current) clearTimeout(flashTimer.current);
@@ -201,6 +202,9 @@ export default function Navbar() {
       >
         Morest Burawa
       </a>
+
+      {/* background toggle moved into navbar for easier access */}
+      <BackgroundToggle />
 
       <ul className="flex items-center gap-3 m-0 p-0 list-none" role="menubar">
         {NAV_ITEMS.map((item) => (

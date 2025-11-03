@@ -8,9 +8,30 @@ import Blog from "./components/Blog";
 import ProjectDetail from "./components/ProjectDetail";
 import CodeBackground from "./components/CodeBackground";
 import BackgroundVideo from "./components/BackgroundVideo";
+import Poster from "./components/Poster";
 import Navbar from "./components/Navbar";
 
 function App() {
+  const [bgMode, setBgMode] = React.useState("picture");
+  const [bgVideo, setBgVideo] = React.useState(false);
+
+  React.useEffect(() => {
+    try {
+      const m = localStorage.getItem("bgMode");
+      const v = localStorage.getItem("bgVideo");
+      if (m) setBgMode(m);
+      if (v) setBgVideo(v === "true");
+    } catch (e) {}
+
+    function onBgChange(e) {
+      const { mode, video } = e.detail || {};
+      if (mode) setBgMode(mode);
+      if (typeof video === "boolean") setBgVideo(video);
+    }
+    window.addEventListener("bgChange", onBgChange);
+    return () => window.removeEventListener("bgChange", onBgChange);
+  }, []);
+
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -30,12 +51,31 @@ function App() {
     <>
       <Navbar />
       <CodeBackground />
-      {/* Background video (autoplays muted). Uses a public sample; replace with your own webm for best perf */}
-      <BackgroundVideo
-        // src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-        poster="https://picsum.photos/seed/hero/1200/800"
-        tint="rgba(0,0,0,0.48)"
-      />
+      {/* Background controls (picture vs black and optional video) */}
+      {/* BackgroundToggle is rendered inside the Navbar so we listen for bgChange events */}
+
+      {/* Render background according to user settings */}
+      {bgMode === "picture" && (
+        <>
+          {bgVideo ? (
+            <BackgroundVideo
+              src="/src/assets/background.webm"
+              fallbackSrc="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              poster="https://picsum.photos/seed/hero/1200/800"
+              tint="rgba(0,0,0,0.48)"
+            />
+          ) : (
+            <Poster
+              src={"https://picsum.photos/seed/hero/1200/800"}
+              className="fixed inset-0 -z-10"
+            />
+          )}
+        </>
+      )}
+
+      {bgMode === "black" && (
+        <div className="bg-black-layer fixed inset-0 -z-10 bg-black" />
+      )}
       <main>
         {/* If the hash is pointing to a project detail, render the detail page above sections */}
         {typeof window !== "undefined" &&

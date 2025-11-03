@@ -17,6 +17,8 @@ body {
   font-family: 'Qurova', 'Goote', JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
   /* keep content below the fixed navbar */
   padding-top: 96px;
+  /* enable smooth touch scrolling on supported devices */
+  overscroll-behavior-y: auto;
 }
 
 /* Ensure anchors and form text use readable text color */
@@ -122,6 +124,19 @@ html {
 /* Responsive: collapse labels on small screens */
 @media (max-width: 640px) { .nav { padding: 10px; } .nav-link .label { display: none; } .nav .logo { margin-right: 6px; } }
 
+/* Mobile-specific adjustments to improve scrolling and avoid nav overlap */
+@media (max-width: 640px) {
+  body { padding-top: 72px; }
+  html, body, main { touch-action: pan-y; }
+  .nav { left: 8px; right: 8px; top: 8px; padding: 8px; border-radius: 10px; }
+  .nav .logo { font-size: 0.95rem; }
+  .nav .nav-items { gap: 6px; overflow-x: auto; justify-content: flex-start; }
+  .nav-link { padding: 6px 8px; font-size: 0.82rem; }
+  .nav-link .label { display: none; }
+  /* ensure fixed background controls don't intercept touch on main content */
+  .pointer-events-auto { pointer-events: auto; }
+}
+
 h1 { color: var(--text-color); }
 
 /* Project card content area scroll and hover styles */
@@ -221,4 +236,10 @@ h1 { color: var(--text-color); }
 @media (min-width: 1280px) {
   .code-bg { opacity: 0.26; }
 }
+
+/* Poster background when video is disabled */
+.bg-poster { background-repeat: no-repeat; }
+
+/* Black layer when user chooses black background explicitly */
+.bg-black-layer { background: #000; }
 

@@ -1,12 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export default function BackgroundVideo({ src, poster, tint = "rgba(0,0,0,0.35)", label = "Behind the scenes" }) {
+import Poster from "./Poster";
+
+export default function BackgroundVideo({
+  src,
+  fallbackSrc,
+  poster,
+  tint = "rgba(0,0,0,0.35)",
+  label = "Behind the scenes",
+}) {
   const [playing, setPlaying] = useState(true);
   const videoRef = useRef(null);
   const [error, setError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(
+    src || "/src/assets/background.webm"
+  );
 
   useEffect(() => {
-    const prefersReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduce =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduce) {
       setPlaying(false);
       if (videoRef.current) videoRef.current.pause();
@@ -28,10 +41,13 @@ export default function BackgroundVideo({ src, poster, tint = "rgba(0,0,0,0.35)"
   }
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+    >
       <video
         ref={videoRef}
-        src={src}
+        src={currentSrc}
         poster={poster}
         className="w-full h-full object-cover absolute inset-0"
         autoPlay
@@ -42,6 +58,13 @@ export default function BackgroundVideo({ src, poster, tint = "rgba(0,0,0,0.35)"
         onPause={() => setPlaying(false)}
         onError={(e) => {
           console.error("BackgroundVideo error", e);
+          // try fallback if available and not already tried
+          if (fallbackSrc && currentSrc !== fallbackSrc) {
+            console.info("BackgroundVideo: trying fallback src", fallbackSrc);
+            setCurrentSrc(fallbackSrc);
+            setError(false);
+            return;
+          }
           setError(true);
         }}
       />
