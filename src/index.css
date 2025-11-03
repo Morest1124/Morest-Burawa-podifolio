@@ -55,6 +55,58 @@ html {
 
 @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+/* Navigation glow and gradient border */
+.nav {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  top: 12px;
+  border-radius: 14px;
+  transition: box-shadow 240ms ease, border-color 240ms ease, transform 200ms ease;
+}
+.nav::before {
+  /* subtle gradient rim behind the nav */
+  content: "";
+  position: absolute;
+  inset: -2px; /* extend just outside */
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(90deg, rgba(255,214,107,0.06), rgba(255,180,60,0.06));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.nav:hover::before { opacity: 0.95; }
+
+/* Active link glow and border */
+.nav-link.active {
+  border: 1px solid rgba(255,214,107,0.2);
+  box-shadow: 0 14px 36px rgba(255,214,107,0.14), 0 0 28px rgba(255,214,107,0.12) inset;
+  transform: translateY(-5px) scale(1.02);
+}
+.nav-link {
+  transition: box-shadow 220ms ease, transform 160ms ease, border-color 200ms ease;
+}
+
+/* subtle pulsing for the active pulse indicator */
+@keyframes pulse-small { 0% { transform: scale(0.8); opacity: 0.6 } 70% { transform: scale(1.15); opacity: 1 } 100% { transform: scale(1); opacity: 0.9 } }
+.nav-link .pulse { transition: opacity 160ms ease, transform 160ms ease; }
+.nav-link.active .pulse { animation: pulse-small 1200ms infinite ease-in-out; }
+
+/* flash state: briefly brighten the rim and lift the nav */
+.nav.flash {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 18px 48px rgba(255,214,107,0.12);
+}
+.nav.flash::before {
+  opacity: 1 !important;
+  filter: blur(6px);
+  transform: scale(1.01);
+}
+
 .nav-items { display: flex; gap: 8px; align-items: center; margin: 0; padding: 0; list-style: none; }
 .nav-item { list-style: none; }
 
@@ -90,6 +142,25 @@ h1 { color: var(--text-color); }
 .btn-accent { background: var(--accent-soft); }
 .btn-accent:hover { background: rgba(255,214,107,0.18); }
 .dot-accent { background: var(--accent); }
+
+/* Prominent category pill styles used in MyWork */
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-color);
+  font-weight: 600;
+  min-width: 130px;
+  justify-content: center;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+.category-pill:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+.category-pill.active { background: linear-gradient(90deg, rgba(255,214,107,0.14), rgba(255,240,177,0.04)); border-color: rgba(255,214,107,0.14); color: #111; box-shadow: 0 12px 36px rgba(255,214,107,0.08); }
+.category-icon { opacity: 0.95; }
 
 /* Highlight (blonde) style used in Services heading */
 .highlight-blonde {
@@ -130,5 +201,24 @@ h1 { color: var(--text-color); }
 /* reduce motion for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .reveal, .group, .nav-link { transition: none !important; }
+}
+
+/* Dim code background layer */
+.code-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  /* stronger dimming requested: increase opacity and add a dark tint */
+  opacity: 0.22;
+  background-repeat: repeat;
+  background-size: 600px 400px;
+  background-color: rgba(0,0,0,0.45);
+  background-blend-mode: multiply;
+  filter: blur(1px) contrast(0.7) saturate(0.5) brightness(0.85);
+  pointer-events: none;
+}
+
+@media (min-width: 1280px) {
+  .code-bg { opacity: 0.26; }
 }
 

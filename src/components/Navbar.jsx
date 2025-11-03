@@ -139,6 +139,8 @@ const NAV_ITEMS = [
 
 export default function Navbar() {
   const [active, setActive] = useState("services");
+  const navRef = React.useRef(null);
+  const flashTimer = React.useRef(null);
 
   useEffect(() => {
     const sections = NAV_ITEMS.map((n) => document.getElementById(n.id)).filter(
@@ -164,6 +166,20 @@ export default function Navbar() {
     return () => obs.disconnect();
   }, []);
 
+  // flash nav rim when active section changes
+  useEffect(() => {
+    if (!navRef.current) return;
+    // add flash class
+    navRef.current.classList.add('flash');
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => {
+      navRef.current && navRef.current.classList.remove('flash');
+    }, 520);
+    return () => {
+      if (flashTimer.current) clearTimeout(flashTimer.current);
+    };
+  }, [active]);
+
   const handleClick = (e, id) => {
     e && e.preventDefault();
     const el = document.getElementById(id);
@@ -173,7 +189,8 @@ export default function Navbar() {
 
   return (
     <nav
-      className="fixed top-3 left-3 right-3 z-50 flex items-center justify-between gap-4 px-4 py-3 rounded-xl bg-black/60 border-accent backdrop-blur-md shadow-lg"
+      ref={navRef}
+      className="nav fixed top-3 left-3 right-3 z-50 flex items-center justify-between gap-4 px-4 py-3 rounded-xl bg-black/60 border-accent backdrop-blur-md shadow-lg"
       aria-label="Primary navigation"
     >
       <a
