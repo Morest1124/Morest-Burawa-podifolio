@@ -86,7 +86,7 @@ function App() {
       {bgMode === "black" && (
         <div className="bg-black-layer fixed inset-0 -z-10 bg-black" />
       )}
-      <main>
+      <main className="font-grotesk">
         {/* If the hash is pointing to a project detail, render the detail page above sections */}
         {typeof window !== "undefined" &&
           window.location.hash.startsWith("#project-") && (

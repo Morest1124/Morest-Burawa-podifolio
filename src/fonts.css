@@ -1,0 +1,16 @@
+
+@font-face {
+  font-family: 'Groote';
+  src: url('./assets/fonts/Groote-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: 0.05em; /* Adjust as needed */
+}
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('./assets/fonts/QurovaDEMO-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  letter-spacing: 0.05em; /* Adjust as needed */
+}

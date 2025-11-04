@@ -8,7 +8,8 @@ export default function Services() {
           <h1 className="text-3xl sm:text-4xl font-bold">
             What I do —{" "}
             <span className="highlight-blonde">
-              Build delightful experiences
+              Building Elegant and Powerful Applications that Transform Ideas
+              into Reality.
             </span>
           </h1>
 
@@ -17,7 +18,7 @@ export default function Services() {
             application development. I enjoy crafting responsive web solutions
             using modern technologies like React, Tailwind CSS, Django REST
             framework and docker, while also applying DevOps practices,
-            continuously aiming to deliver high-quality, comprehensive,
+            continuousl-y aiming to deliver high-quality, comprehensive,
             user-centric software solutions.
           </p>
 
