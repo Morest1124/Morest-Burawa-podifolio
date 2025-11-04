@@ -23,6 +23,7 @@ export default function About() {
     { name: "Django", icon: <SiDjango /> },
     { name: "Docker", icon: <FaDocker /> },
     { name: "Tailwind CSS", icon: <SiTailwindcss /> },
+    // { name: "JWT", icon: <SiJsonwebtokens /> },
   ];
 
   return (
@@ -48,14 +49,18 @@ export default function About() {
           </p>
           <div className="mt-8">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">Tech Stack</h2>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-8">
               {techStack.map((tech, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center p-4 rounded-lg shadow-md bg-gray-800"
+                  className="group flex flex-col items-center p-4 rounded-lg transition-transform transform hover:scale-110"
                 >
-                  <div className="text-4xl mb-2">{tech.icon}</div>
-                  <div>{tech.name}</div>
+                  <div className="tech text-5xl text-green-700 group-hover:text-white transition-colors duration-300">
+                    {tech.icon}
+                  </div>
+                  <div className="mt-2 text-sm text-gray-400 group-hover:text-white transition-colors duration-300">
+                    {tech.name}
+                  </div>
                 </div>
               ))}
             </div>
