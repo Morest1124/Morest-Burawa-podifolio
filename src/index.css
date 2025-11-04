@@ -124,6 +124,14 @@ html {
 h1 { color: var(--text-color); }
 .tech { color: var(--text-color); }
 
+.font-numeric {
+  font-family: 'Groote', sans-serif;
+}
+
+.font-monospace {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+}
+
 
 /* Project card content area scroll and hover styles */
 .content-area::-webkit-scrollbar { height: 8px; width: 8px; }
