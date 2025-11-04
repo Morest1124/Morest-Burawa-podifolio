@@ -15,7 +15,10 @@
 body {
   background-color: var(--bg-black);
   color: var(--text-color1);
-  font-family: 'Qurova', 'Goote', JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  font-family: 'Qurova', JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  line-height: 2.1; /* Adjust as needed for better readability */
+  letter-spacing: 1px;
+  
   /* keep content below the fixed navbar */
   padding-top: 96px;
   /* enable smooth touch scrolling on supported devices */
