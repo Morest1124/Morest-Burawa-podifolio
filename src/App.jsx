@@ -10,6 +10,7 @@ import CodeBackground from "./components/CodeBackground";
 import BackgroundVideo from "./components/BackgroundVideo";
 import Poster from "./components/Poster";
 import Navbar from "./components/Navbar";
+import back from "./assets/back.jpg";
 
 function App() {
   const [bgMode, setBgMode] = React.useState("picture");
@@ -69,13 +70,14 @@ function App() {
             <BackgroundVideo
               src="/src/assets/background.webm"
               fallbackSrc="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-              poster="https://picsum.photos/seed/hero/1200/800"
+              poster="back"
               tint="rgba(0,0,0,0.48)"
             />
           ) : (
             <Poster
-              src={"https://picsum.photos/seed/hero/1200/800"}
+              src={back}
               className="fixed inset-0 -z-10"
+              tint="rgba(0, 50, 150, 0.3)"
             />
           )}
         </>

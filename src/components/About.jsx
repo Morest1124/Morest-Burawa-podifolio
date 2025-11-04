@@ -1,6 +1,30 @@
 import React from "react";
+import {
+  FaReact,
+  FaPython,
+  FaDocker,
+  FaHtml5,
+  FaCss3Alt,
+} from "react-icons/fa";
+import {
+  SiJavascript,
+  SiTailwindcss,
+  SiDjango,
+  SiJsonwebtokens,
+} from "react-icons/si";
 
 export default function About() {
+  const techStack = [
+    { name: "React", icon: <FaReact /> },
+    { name: "JavaScript", icon: <SiJavascript /> },
+    { name: "HTML5", icon: <FaHtml5 /> },
+    { name: "CSS3", icon: <FaCss3Alt /> },
+    { name: "Python", icon: <FaPython /> },
+    { name: "Django", icon: <SiDjango /> },
+    { name: "Docker", icon: <FaDocker /> },
+    { name: "Tailwind CSS", icon: <SiTailwindcss /> },
+  ];
+
   return (
     <>
       <section className="min-h-screen flex items-center justify-center px-6 py-12">
@@ -22,6 +46,20 @@ export default function About() {
             challenging problems with creative solutions. I aim to contribute to
             impactful projects that make a difference in users' lives.
           </p>
+          <div className="mt-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Tech Stack</h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {techStack.map((tech, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center p-4 rounded-lg shadow-md bg-gray-800"
+                >
+                  <div className="text-4xl mb-2">{tech.icon}</div>
+                  <div>{tech.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </>
