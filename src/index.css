@@ -248,6 +248,17 @@ h1 { color: var(--text-color); }
 }
 
 
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 15s linear infinite;
+}
+
 /* Project card hover effect */
 .project-card {
   transition: all 0.3s ease-in-out;

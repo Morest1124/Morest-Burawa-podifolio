@@ -71,20 +71,22 @@ export default function About() {
 
   return (
     <section id="about" className="py-20 bg-black/20 text-white">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold text-center mb-12">About Me</h2>
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold">Hi, I'm Morest Burawa</h1>
           {/* <h3 className="text-2xl font-semibold text-gray-300 mt-2"></h3> */}
 
-          <p className="flex justify-center gap-2 mt-4">
-            <img
-              src="https://img.shields.io/badge/ALX%20Africa-Learner-blue"
-              alt="ALX Africa"
-            />
-            <img src="https://img.shields.io/badge/Empowering-Business%20with%20Technology-1f8b4c" />
-            <img src="https://img.shields.io/badge/Driven%20by-Hardwork%20and%20Vision-orange" />
-          </p>
+          <div className="marquee">
+            <p className="flex justify-center gap-2 mt-4">
+              <img
+                src="https://img.shields.io/badge/ALX%20Africa-Learner-blue"
+                alt="ALX Africa"
+              />
+              <img src="https://img.shields.io/badge/Empowering-Business%20with%20Technology-1f8b4c" />
+              <img src="https://img.shields.io/badge/Driven%20by-Hardwork%20and%20Vision-orange" />
+            </p>
+          </div>
         </div>
 
         <div className="mb-12">

@@ -105,7 +105,7 @@ export default function Blog() {
       <div className="max-w-6xl mx-auto">
         <header className="mb-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold">Thoughts & Notes</h2>
-          <p className="mt-2 text-sm text-gray-300">
+          <p className="mt-2 text-sm text-gray-300 text-center">
             Short essays on design, development and process. The posts below are
             mock data — they will be served from an API in a future update.
           </p>
@@ -143,12 +143,12 @@ export default function Blog() {
                   className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
                 />
               </div>
-              <div className="p-4">
+              <div className="p-4 text-center">
                 <div className="text-xs text-gray-400">
                   {formatTextWithNumbers(new Date(p.publishedAt).toDateString())}
                 </div>
-                <h3 className="mt-2 font-semibold text-lg">{p.title}</h3>
-                <p className="mt-2 text-sm text-gray-300 line-clamp-3">
+                <h3 className="mt-2 font-semibold text-lg text-center">{p.title}</h3>
+                <p className="mt-2 text-sm text-gray-300 line-clamp-3 text-center">
                   {p.excerpt}
                 </p>
                 <div className="mt-3 flex items-center justify-between">

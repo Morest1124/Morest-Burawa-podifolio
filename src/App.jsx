@@ -113,19 +113,19 @@ function App() {
               <ProjectDetail />
             </section>
           )}
-        <section id="services" className="min-h-screen">
+        <section id="services">
           <Services />
         </section>
-        <section id="about" className="min-h-screen">
+        <section id="about">
           <About />
         </section>
-        <section id="mywork" className="min-h-screen">
+        <section id="mywork">
           <MyWork />
         </section>
-        <section id="contacts" className="min-h-screen">
+        <section id="contacts">
           <Contacts />
         </section>
-        <section id="blog" className="min-h-screen">
+        <section id="blog">
           <Blog />
         </section>
       </main>
