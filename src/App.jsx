@@ -15,6 +15,19 @@ import back from "./assets/back.jpg";
 function App() {
   const [bgMode, setBgMode] = React.useState("picture");
   const [bgVideo, setBgVideo] = React.useState(false);
+  const [showAnnotation, setShowAnnotation] = React.useState(false);
+
+  React.useEffect(() => {
+    const hasSeenAnnotation = sessionStorage.getItem('hasSeenAnnotation');
+    if (!hasSeenAnnotation) {
+        setShowAnnotation(true);
+    }
+  }, []);
+
+  const handleCloseAnnotation = () => {
+      sessionStorage.setItem('hasSeenAnnotation', 'true');
+      setShowAnnotation(false);
+  };
 
   React.useEffect(() => {
     try {
@@ -58,6 +71,12 @@ function App() {
   }, []);
   return (
     <>
+      {showAnnotation && (
+        <div style={{position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(0, 0, 0, 0.7)', color: 'white', padding: '10px 20px', borderRadius: '10px', zIndex: 1000}}>
+            <p>Click the logo to change the background.</p>
+            <button onClick={handleCloseAnnotation} style={{position: 'absolute', top: '-5px', right: '1px', background: 'none', border: 'none', color: 'white', fontSize: '16px', cursor: 'pointer'}}>&times;</button>
+        </div>
+      )}
       <Navbar />
       <CodeBackground />
       {/* Background controls (picture vs black and optional video) */}
