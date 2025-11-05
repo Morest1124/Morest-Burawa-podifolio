@@ -25,6 +25,7 @@ const NAV_ITEMS = [
 export default function Navbar() {
   const [active, setActive] = useState("services");
   const [backgroundState, setBackgroundState] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
 
@@ -104,18 +105,46 @@ export default function Navbar() {
 
       </a>
 
-      <ul className="nav-items flex items-center gap-3 m-0 p-0 list-none">
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-white focus:outline-none"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <ul
+        className={`nav-items md:flex items-center gap-3 m-0 p-0 list-none ${
+          isMenuOpen ? "flex flex-col absolute top-16 left-0 right-0 bg-black/80 rounded-md shadow-lg" : "hidden"
+        }}`}
+      >
         {NAV_ITEMS.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} className="w-full text-center">
             <a
               href={`#${item.id}`}
-              onClick={(e) => handleLinkClick(e, item.id)}
+              onClick={(e) => {
+                handleLinkClick(e, item.id);
+                setIsMenuOpen(false);
+              }}
               className={`inline-flex items-center gap-2 px-3 py-2 rounded-md font-semibold transition-colors duration-150 transform hover:-translate-y-0.5 ${active === item.id ? 'active' : ''}`}
             >
               <span className="label text-sm">
                 {item.label}
               </span>
-
             </a>
           </li>
         ))}

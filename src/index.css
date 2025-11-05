@@ -105,8 +105,19 @@ html {
 .nav-link .pulse { position: absolute; right: -6px; top: -6px; width: 10px; height: 10px; border-radius: 999px; background: linear-gradient(90deg,#FFD66B88,#FFE0A088); opacity: 0; transform: scale(0.6); transition: opacity 220ms ease, transform 220ms ease; }
 .nav-link.active .pulse { opacity: 1; transform: scale(1); }
 
-/* Responsive: collapse labels on small screens */
-@media (max-width: 640px) { .nav { padding: 10px; } .nav-link .label { display: none; } .nav .logo { margin-right: 6px; } }
+@media (max-width: 768px) {
+  .nav-items {
+    display: none;
+  }
+
+  .nav-items.flex {
+    display: flex;
+  }
+
+  .nav-items.hidden {
+    display: none;
+  }
+}
 
 /* Mobile-specific adjustments to improve scrolling and avoid nav overlap */
 @media (max-width: 640px) {
@@ -114,9 +125,6 @@ html {
   html, body, main { touch-action: pan-y; }
   .nav { left: 8px; right: 8px; top: 8px; padding: 8px; border-radius: 10px; }
   .nav .logo { font-size: 0.95rem; }
-  .nav .nav-items { gap: 6px; overflow-x: auto; justify-content: flex-start; }
-  .nav-link { padding: 6px 8px; font-size: 0.2rem; }
-  .nav-link .label { display: inline-block; font-size: 0.2rem; }
   /* ensure fixed background controls don't intercept touch on main content */
   .pointer-events-auto { pointer-events: auto; }
 }
