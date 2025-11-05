@@ -68,8 +68,8 @@ function App() {
         <>
           {bgVideo ? (
             <BackgroundVideo
-              src="/src/assets/background.webm"
-              fallbackSrc="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              src="/src/assets/code.mp4"
+              fallbackSrc="code.mp4"
               poster="back"
               tint="rgba(0,0,0,0.48)"
             />

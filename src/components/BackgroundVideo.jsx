@@ -12,9 +12,7 @@ export default function BackgroundVideo({
   const [playing, setPlaying] = useState(true);
   const videoRef = useRef(null);
   const [error, setError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(
-    src || "/src/assets/background.webm"
-  );
+  const [currentSrc, setCurrentSrc] = useState(src || "/src/assets/code.mp4");
 
   useEffect(() => {
     const prefersReduce =
