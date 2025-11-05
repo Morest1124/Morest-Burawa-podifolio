@@ -37,13 +37,9 @@ export default function Navbar() {
       if (state) {
         setBackgroundState(Number(state));
       }
-      const hintShown = localStorage.getItem("logoHintShown");
-      if (!hintShown) {
-        setShowHint(true);
-        localStorage.setItem("logoHintShown", "true");
-        const t = setTimeout(() => setShowHint(false), 3800);
-        return () => clearTimeout(t);
-      }
+      setShowHint(true);
+      const t = setTimeout(() => setShowHint(false), 5800);
+      return () => clearTimeout(t);
     } catch (e) {
       // ignore
     }
@@ -54,13 +50,13 @@ export default function Navbar() {
       localStorage.setItem("backgroundState", String(backgroundState));
     } catch (e) {}
 
-    let mode = 'picture';
+    let mode = "picture";
     let video = true;
 
     if (backgroundState === 1) {
-      mode = 'black';
+      mode = "black";
       video = false;
-    } 
+    }
 
     try {
       window.dispatchEvent(
@@ -129,7 +125,9 @@ export default function Navbar() {
   const handleLogoClick = (e) => {
     e.preventDefault();
     if (!servicesVisible) {
-      document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+      document
+        .getElementById("services")
+        .scrollIntoView({ behavior: "smooth" });
     } else {
       setBackgroundState((s) => (s + 1) % 2);
     }
@@ -156,8 +154,8 @@ export default function Navbar() {
       >
         Morest Burawa
         {showHint && (
-          <div className="absolute mt-2 bg-accent text-black text-xs px-3 py-1 rounded shadow-lg">
-            Click my name to change the background
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 p-2 bg-accent text-xs rounded shadow-lg whitespace-nowrap">
+            Click the logo to change background!
           </div>
         )}
       </a>
