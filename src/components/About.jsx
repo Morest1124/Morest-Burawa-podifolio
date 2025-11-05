@@ -1,3 +1,4 @@
+import { formatTextWithNumbers } from "../utils/formatTextWithNumbers";
 import React from "react";
 import {
   FaReact,
@@ -80,10 +81,10 @@ export default function About() {
                           {workExperience.map((job, index) => (
                             <div key={index} className="mb-8 ml-4"> 
                               <div className="absolute w-4 h-4 bg-gray-400 rounded-full -left-2 border-2 border-gray-900"></div>
-                              <p className="text-sm text-gray-400 font-numeric">{job.period}</p> 
+                              <p className="text-sm text-gray-400">{formatTextWithNumbers(job.period)}</p> 
                               <h4 className="text-xl font-semibold">{job.role}</h4>
                               <p className="text-md font-medium text-gray-300">{job.company}</p>
-                              <p className="mt-2 text-gray-400">{job.description}</p>
+                              <p className="mt-2 text-gray-400">{formatTextWithNumbers(job.description)}</p>
                             </div>
                           ))}
                         </div>
@@ -94,7 +95,7 @@ export default function About() {
                         <h3 className="text-3xl font-bold mb-6">Tech Stack</h3>
                         <div className="flex flex-wrap justify-center">
                           {techStack.map((tech, index) => (
-                            <div key={index} className="flex items-center bg-gray-800/20 rounded-lg p-4 m-2 border border-gray-700"> 
+                            <div key={index} className="flex items-center bg-gray-800/20 rounded-lg p-4 m-2 border border-gray-700 transform transition-transform duration-300 hover:scale-105"> 
                               <div className="text-3xl mr-4">{tech.icon}</div>
                               <span className="text-lg">{tech.name}</span>
                             </div>

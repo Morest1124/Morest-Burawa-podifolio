@@ -1,3 +1,4 @@
+import { formatTextWithNumbers } from "../utils/formatTextWithNumbers";
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { ALL_PROJECTS } from "../data/projects";
 import Img from "./Img";
@@ -38,94 +39,98 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
 
   return (
     <article
-      className="group relative overflow-hidden rounded-lg border border-accent shadow-sm bg-black/30"
+      className="group project-card relative overflow-hidden rounded-lg border border-accent shadow-sm bg-black/30 flex flex-col h-full"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="w-full h-40 sm:h-44 lg:h-36 bg-black/20 overflow-hidden relative">
-        {images.map((src, i) => (
-          <div
-            key={src}
-            role="button"
-            tabIndex={0}
-            onClick={() => onOpenLightbox && onOpenLightbox(images, i, p.title)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") onOpenLightbox && onOpenLightbox(images, i, p.title);
-            }}
-            aria-label={`Open full image ${i + 1} for ${p.title}`}
-            className={`absolute inset-0 block w-full h-full ${
-              i === index ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            } transition-opacity duration-700 ease-out cursor-zoom-in`}
-            style={{ transformOrigin: "center" }}
-          >
-            <Img
-              src={src}
-              alt={`${p.title} ${i + 1}`}
-              loading="lazy"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
-
-        {/* Prev / Next controls (visible on hover) */}
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={goPrev}
-              aria-label={`Previous image for ${p.title}`}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      <div className="flex-grow">
+        <div className="w-full h-40 sm:h-44 lg:h-36 bg-black/20 overflow-hidden relative">
+          {images.map((src, i) => (
+            <div
+              key={src}
+              role="button"
+              tabIndex={0}
+              onClick={() => onOpenLightbox && onOpenLightbox(images, i, p.title)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") onOpenLightbox && onOpenLightbox(images, i, p.title);
+              }}
+              aria-label={`Open full image ${i + 1} for ${p.title}`}
+              className={`absolute inset-0 block w-full h-full ${
+                i === index ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              } transition-opacity duration-700 ease-out cursor-zoom-in`}
+              style={{ transformOrigin: "center" }}
             >
-              ‹
-            </button>
-            <button
-              onClick={goNext}
-              aria-label={`Next image for ${p.title}`}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-            >
-              ›
-            </button>
-            <div className="absolute left-3 bottom-3 z-10 flex items-center gap-2">
-              {images.map((_, dotIdx) => (
-                <button
-                  key={dotIdx}
-                  onClick={() => setIndex(dotIdx)}
-                  aria-label={`Show image ${dotIdx + 1} for ${p.title}`}
-                  className={`w-2 h-2 rounded-full transition-opacity ${
-                    dotIdx === index
-                      ? "dot-accent"
-                      : "bg-[rgba(255,255,255,0.18)]"
-                  }`}
-                />
-              ))}
+              <Img
+                src={src}
+                alt={`${p.title} ${i + 1}`}
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
             </div>
-          </>
-        )}
+          ))}
 
-        {/* info button - navigate to project details */}
+          {/* Prev / Next controls (visible on hover) */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={goPrev}
+                aria-label={`Previous image for ${p.title}`}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+              >
+                ‹
+              </button>
+              <button
+                onClick={goNext}
+                aria-label={`Next image for ${p.title}`}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+              >
+                ›
+              </button>
+              <div className="absolute left-3 bottom-3 z-10 flex items-center gap-2">
+                {images.map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    onClick={() => setIndex(dotIdx)}
+                    aria-label={`Show image ${dotIdx + 1} for ${p.title}`}
+                    className={`w-2 h-2 rounded-full transition-opacity ${
+                      dotIdx === index
+                        ? "dot-accent"
+                        : "bg-[rgba(255,255,255,0.18)]"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* info button - navigate to project details */}
+          <button
+            onClick={() => {
+              const slug = p.slug || p.id;
+              window.location.hash = `project-${slug}`;
+            }}
+            aria-label={`Open full details for ${p.title}`}
+            className="absolute right-2 top-2 z-20 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+          >
+            ℹ️
+          </button>
+        </div>
+
+        <div className="p-4 max-h-52 sm:max-h-60 overflow-auto content-area">
+          <h3 className="font-semibold text-lg">{p.title}</h3>
+          <p className="mt-2 text-sm">{formatTextWithNumbers(p.caseStudy || p.designUseCase || p.desc)}</p>
+        </div>
+      </div>
+
+      <div className="p-4 pt-0 view-button-container">
         <button
-          onClick={() => {
-            const slug = p.slug || p.id;
-            window.location.hash = `project-${slug}`;
-          }}
-          aria-label={`Open full details for ${p.title}`}
-          className="absolute right-2 top-2 z-20 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+          onClick={() => onOpen && onOpen(p)}
+          className="w-full inline-flex items-center justify-center rounded-md px-3 py-2 btn-accent view-button"
+          aria-label={`Open ${p.title}`}
         >
-          ℹ️
+          View →
         </button>
       </div>
-
-      <div className="p-4 max-h-52 sm:max-h-60 overflow-auto content-area">
-        <h3 className="font-semibold text-lg">{p.title}</h3>
-        <p className="mt-2 text-sm">{p.caseStudy || p.designUseCase || p.desc}</p>
-      </div>
-
-      <button
-        onClick={() => onOpen && onOpen(p)}
-        className="absolute inset-x-4 bottom-4 inline-flex items-center justify-center rounded-md px-3 py-2 btn-accent opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-        aria-label={`Open ${p.title}`}
-      >
-        View →
-      </button>
     </article>
   );
 }

@@ -1,3 +1,4 @@
+import { formatTextWithNumbers } from "../utils/formatTextWithNumbers";
 import React, { useEffect, useMemo, useState } from "react";
 import Img from "./Img";
 
@@ -144,7 +145,7 @@ export default function Blog() {
               </div>
               <div className="p-4">
                 <div className="text-xs text-gray-400">
-                  {new Date(p.publishedAt).toDateString()}
+                  {formatTextWithNumbers(new Date(p.publishedAt).toDateString())}
                 </div>
                 <h3 className="mt-2 font-semibold text-lg">{p.title}</h3>
                 <p className="mt-2 text-sm text-gray-300 line-clamp-3">
@@ -196,14 +197,14 @@ export default function Blog() {
               </div>
               <div className="p-6">
                 <div className="text-xs text-gray-400">
-                  {new Date(selected.publishedAt).toDateString()}
+                  {formatTextWithNumbers(new Date(selected.publishedAt).toDateString())}
                 </div>
                 <h3 className="text-2xl font-bold mt-2 mb-3">
                   {selected.title}
                 </h3>
                 <div className="prose prose-invert max-w-none text-sm">
                   {selected.content.split("\n\n").map((para, i) => (
-                    <p key={i}>{para}</p>
+                    <p key={i}>{formatTextWithNumbers(para)}</p>
                   ))}
                 </div>
 

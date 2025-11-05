@@ -1,3 +1,4 @@
+import { formatTextWithNumbers } from "../utils/formatTextWithNumbers";
 import React from "react";
 import { FaPhone, FaEnvelope, FaLinkedin, FaGithub, FaMapMarkerAlt } from "react-icons/fa";
 
@@ -44,10 +45,10 @@ export default function Contacts() {
                   rel="noopener noreferrer"
                   className="hover:text-accent"
                 >
-                  {contact.text}
+                  {formatTextWithNumbers(contact.text)}
                 </a>
               ) : (
-                <span>{contact.text}</span>
+                <span>{formatTextWithNumbers(contact.text)}</span>
               )}
             </li>
           ))}

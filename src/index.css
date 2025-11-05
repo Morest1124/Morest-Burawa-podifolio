@@ -15,7 +15,7 @@
 body {
   background-color: var(--bg-black);
   color: var(--text-color1);
-  font-family: 'Qurova', JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  font-family: 'Helvetica Neue', 'Qurova', Arial, sans-serif, JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
   line-height: 2.1; /* Adjust as needed for better readability */
   letter-spacing: 1px;
   
@@ -101,7 +101,7 @@ html {
 .nav-link .label { display: inline-block; font-size: 0.92rem; }
 .nav-link:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(255,214,107,0.06); }
 .nav .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text-color); text-decoration: none; }
-.nav-link.active { color: var(--text-color); background: linear-gradient(90deg, rgba(255,214,107,0.14), rgba(255,240,177,0.06)); box-shadow: 0 8px 30px rgba(255,214,107,0.12), inset 0 -1px 0 rgba(255,255,255,0.02); }
+.nav-link.active { color: var(--text-color); background: linear-gradient(90deg, rgba(255,214,107,0.14), rgba(255,240,177,0.04)); box-shadow: 0 8px 30px rgba(255,214,107,0.12), inset 0 -1px 0 rgba(255,255,255,0.02); }
 .nav-link .pulse { position: absolute; right: -6px; top: -6px; width: 10px; height: 10px; border-radius: 999px; background: linear-gradient(90deg,#FFD66B88,#FFE0A088); opacity: 0; transform: scale(0.6); transition: opacity 220ms ease, transform 220ms ease; }
 .nav-link.active .pulse { opacity: 1; transform: scale(1); }
 
@@ -124,9 +124,7 @@ html {
 h1 { color: var(--text-color); }
 .tech { color: var(--text-color); }
 
-.font-numeric {
-  font-family: 'Groote', sans-serif;
-}
+
 
 .font-monospace {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
@@ -237,3 +235,28 @@ h1 { color: var(--text-color); }
 /* Black layer when user chooses black background explicitly */
 .bg-black-layer { background: #000; }
 
+.font-helvetica {
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+
+/* Project card hover effect */
+.project-card {
+  transition: all 0.3s ease-in-out;
+  height: 22rem; /* 352px */
+}
+
+.project-card .view-button-container {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.project-card:hover {
+  height: 26rem; /* 416px */
+}
+
+.project-card:hover .view-button-container {
+  opacity: 1;
+  transform: translateY(0);
+}
