@@ -23,9 +23,7 @@ const NAV_ITEMS = [
   },
 ];
 export default function Navbar() {
-
-
-
+  const [active, setActive] = useState("services");
   const [backgroundState, setBackgroundState] = useState(0);
 
 
@@ -50,6 +48,30 @@ export default function Navbar() {
       );
     } catch (e) {}
   }, [backgroundState]);
+
+  useEffect(() => {
+    const sections = NAV_ITEMS.map((n) => document.getElementById(n.id)).filter(
+      Boolean
+    );
+    if (!sections.length) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -40% 0px",
+        threshold: [0.2, 0.5, 0.75],
+      }
+    );
+
+    sections.forEach((s) => obs.observe(s));
+    return () => obs.disconnect();
+  }, []);
 
 
 
@@ -88,7 +110,7 @@ export default function Navbar() {
             <a
               href={`#${item.id}`}
               onClick={(e) => handleLinkClick(e, item.id)}
-              className={`inline-flex items-center gap-2 px-3 py-2 rounded-md font-semibold transition-colors duration-150 transform hover:-translate-y-0.5`}
+              className={`inline-flex items-center gap-2 px-3 py-2 rounded-md font-semibold transition-colors duration-150 transform hover:-translate-y-0.5 ${active === item.id ? 'active' : ''}`}
             >
               <span className="label text-sm">
                 {item.label}
