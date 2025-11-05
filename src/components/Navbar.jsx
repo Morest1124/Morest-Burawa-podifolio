@@ -104,7 +104,7 @@ export default function Navbar() {
 
       </a>
 
-      <ul className="flex items-center gap-3 m-0 p-0 list-none">
+      <ul className="nav-items flex items-center gap-3 m-0 p-0 list-none">
         {NAV_ITEMS.map((item) => (
           <li key={item.id}>
             <a
