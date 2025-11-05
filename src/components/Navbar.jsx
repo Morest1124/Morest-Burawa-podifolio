@@ -93,7 +93,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="nav fixed top-3 left-3 right-3 z-50 flex items-center justify-between gap-4 px-4 py-3 rounded-xl bg-black/60 border-accent backdrop-blur-md shadow-lg"
+      className="nav fixed top-3 left-3 z-50 flex items-center justify-between gap-4 px-4 py-3 rounded-xl bg-black/60 border-accent backdrop-blur-md shadow-lg"
 
     >
       <a
