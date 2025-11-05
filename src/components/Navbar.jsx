@@ -4,139 +4,24 @@ const NAV_ITEMS = [
   {
     id: "services",
     label: "Services",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <path
-          d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M19.4 15a1 1 0 0 0 .2 1.1l.8.8a1 1 0 0 1 0 1.4l-1 1a1 1 0 0 1-1.4 0l-.8-.8a1 1 0 0 0-1.1-.2 7 7 0 0 1-2.2.4 7 7 0 0 1-2.2-.4 1 1 0 0 0-1.1.2l-.8.8a1 1 0 0 1-1.4 0l-1-1a1 1 0 0 1 0-1.4l.8-.8a1 1 0 0 0 .2-1.1 7 7 0 0 1-.4-2.2 7 7 0 0 1 .4-2.2 1 1 0 0 0-.2-1.1l-.8-.8a1 1 0 0 1 0-1.4l1-1a1 1 0 0 1 1.4 0l.8.8a1 1 0 0 0 1.1.2c.7-.3 1.4-.5 2.2-.5s1.5.2 2.2.5a1 1 0 0 0 1.1-.2l.8-.8a1 1 0 0 1 1.4 0l1 1a1 1 0 0 1 0 1.4l-.8.8a1 1 0 0 0-.2 1.1c.3.7.5 1.4.5 2.2s-.2 1.5-.5 2.2z"
-          stroke="currentColor"
-          strokeWidth="0.9"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
   },
   {
     id: "about",
     label: "About",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.2" />
-        <path
-          d="M12 8v.01M11 12h1v4h1"
-          stroke="currentColor"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
   },
   {
     id: "mywork",
     label: "My Work",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <rect
-          x="3"
-          y="7"
-          width="18"
-          height="13"
-          rx="2"
-          stroke="currentColor"
-          strokeWidth="1.2"
-        />
-        <path
-          d="M7 4h10v3H7z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
   },
   {
     id: "contacts",
     label: "Contacts",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <path
-          d="M22 6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12l4-2 4 2 4-2 4 2V6z"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
   },
   {
     id: "blog",
     label: "Blog",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <path
-          d="M21 15V6a2 2 0 0 0-2-2H7l-4 4v9a2 2 0 0 0 2 2h12"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M7 7v6"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
   },
 ];
-
 export default function Navbar() {
   const [active, setActive] = useState("services");
   const navRef = React.useRef(null);
@@ -175,10 +60,7 @@ export default function Navbar() {
     if (backgroundState === 1) {
       mode = 'black';
       video = false;
-    } else if (backgroundState === 2) {
-      mode = 'picture';
-      video = false;
-    }
+    } 
 
     try {
       window.dispatchEvent(
@@ -249,7 +131,7 @@ export default function Navbar() {
     if (!servicesVisible) {
       document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
     } else {
-      setBackgroundState((s) => (s + 1) % 3);
+      setBackgroundState((s) => (s + 1) % 2);
     }
   };
 
@@ -294,9 +176,6 @@ export default function Navbar() {
                   : "hover:-translate-y-0.5"
               }`}
             >
-              <span className="icon" aria-hidden>
-                {item.icon}
-              </span>
               <span className="label hidden sm:inline-block text-sm">
                 {item.label}
               </span>
