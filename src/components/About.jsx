@@ -93,9 +93,9 @@ export default function About() {
           {/* <h2 className="text-3xl font-bold mb-4"> About Me</h2> */}
           <p className="mb-4">
             {" "}
-            I'm <strong>Morest Burawa</strong>, a passionate ALX software
-            engineer and student focused on using code to empower businesses
-            that drive <strong>growth</strong>, <strong>efficiency</strong>, and{" "}
+            I'm <strong>Morest Burawa</strong>, a passionate Junior software
+            engineer focused on using code to empower businesses that drive{" "}
+            <strong>growth</strong>, <strong>efficiency</strong>, and{" "}
             <strong>customer satisfaction</strong>.
           </p>
           <p className="mb-4">

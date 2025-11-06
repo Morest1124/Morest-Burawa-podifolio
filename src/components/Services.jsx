@@ -18,7 +18,7 @@ export default function Services() {
             application development. I enjoy crafting responsive web solutions
             using modern technologies like React, Tailwind CSS, Django REST
             framework and docker, while also applying DevOps practices,
-            continuousl-y aiming to deliver high-quality, comprehensive,
+            continuously aiming to deliver high-quality, comprehensive,
             user-centric software solutions.
           </p>
 
