@@ -11,6 +11,7 @@ import BackgroundVideo from "./components/BackgroundVideo";
 import Poster from "./components/Poster";
 import Navbar from "./components/Navbar";
 import back from "./assets/back.jpg";
+import codeVideo from "./assets/code.mp4";
 
 function App() {
   const [bgMode, setBgMode] = React.useState("picture");
@@ -72,7 +73,7 @@ function App() {
   return (
     <>
       {showAnnotation && (
-        <div style={{position: 'fixed', top: '80px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(0, 0, 0, 0.7)', color: 'white', padding: '10px 20px', borderRadius: '10px', zIndex: 1000}}>
+        <div className="annotation annotation-animation">
             <p>Click the logo to change the background.</p>
             <button onClick={handleCloseAnnotation} style={{position: 'absolute', top: '-5px', right: '1px', background: 'none', border: 'none', color: 'white', fontSize: '16px', cursor: 'pointer'}}>&times;</button>
         </div>
@@ -87,7 +88,7 @@ function App() {
         <>
           {bgVideo ? (
             <BackgroundVideo
-              src="/src/assets/code.mp4"
+              src={codeVideo}
               fallbackSrc="code.mp4"
               poster="back"
               tint="rgba(0,0,0,0.48)"
