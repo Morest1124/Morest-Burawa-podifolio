@@ -89,7 +89,7 @@ class Project(models.Model):
     
     # Project status
     status = models.CharField(max_length=50, default='Ongoing', 
-                            choices=[('Ongoing', 'Ongoing'), ('Completed', 'Completed'), ('Archived', 'Archived')])
+    choices=[('Ongoing', 'Ongoing'), ('Completed', 'Completed'), ('Archived', 'Archived')])
     
     # Featured project
     is_featured = models.BooleanField(default=False)
@@ -119,6 +119,11 @@ class BlogPost(models.Model):
     view_count = models.IntegerField(default=0)
     meta_description = models.CharField(max_length=160)
     image_url = models.URLField(max_length=200, blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True)
+    edited_date = models.DateTimeField(blank=True, null=True)
+    is_published = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.title
