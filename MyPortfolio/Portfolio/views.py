@@ -61,10 +61,37 @@ class GithubStatsListCreateView(generics.ListCreateAPIView):
     serializer_class = GithubStatsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 class ContactSubmissionListCreateView(generics.ListCreateAPIView):
     queryset = ContactSubmission.objects.all()
     serializer_class = ContactSubmissionSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        
+        # Send an email
+        subject = f"New Contact Form Submission from {instance.name}"
+        message = f"""
+        You have a new submission from your portfolio contact form.
+
+        Name: {instance.name}
+        Email: {instance.email}
+        
+        Message:
+        {instance.message}
+        """
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = ['morestburawa05@gmail.com']
+        
+        try:
+            send_mail(subject, message, from_email, recipient_list)
+        except Exception as e:
+            # Log the error, but don't fail the request
+            print(f"Error sending email: {e}")
+
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
