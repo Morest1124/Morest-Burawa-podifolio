@@ -161,7 +161,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://morest-burawa-podifolio.vercel.app/',
+    'https://morest-burawa-podifolio.vercel.app',
     'https://binaryblade24.pythonanywhere.com',
 ]
 CORS_ALLOW_METHODS = [
