@@ -15,7 +15,7 @@ export default function Blog() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/blog-posts/`;
+        const apiUrl = `https://BinaryBlade24.pythonanywhere.com/api/blog-posts/`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

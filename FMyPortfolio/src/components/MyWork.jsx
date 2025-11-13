@@ -134,36 +134,12 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
   );
 }
 
-export default function MyWork() {
-  const [allProjects, setAllProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+export default function MyWork({ allProjects, loading, error }) {
   const [active, setActive] = useState("all");
   const [showMore, setShowMore] = useState(false);
   const [modalProject, setModalProject] = useState(null);
   const [modalIndex, setModalIndex] = useState(0);
   const [lightbox, setLightbox] = useState(null);
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/projects/`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setAllProjects(data);
-      } catch (e) {
-        setError(e.message);
-        console.error("Failed to fetch projects:", e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProjects();
-  }, []);
 
   const visibleProjects = useMemo(() => {
     // Use the new 'allProjects' state which is populated from the API
