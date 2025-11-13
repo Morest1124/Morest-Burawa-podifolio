@@ -1,0 +1,12 @@
+.env
+.env.production
+.env.development
+
+# Virtual Environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+# Database
+db.sqlite3

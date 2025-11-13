@@ -1,6 +1,5 @@
 import { formatTextWithNumbers } from "../utils/formatTextWithNumbers";
 import React, { useMemo, useState, useEffect, useRef } from "react";
-import { ALL_PROJECTS } from "../data/projects";
 import Img from "./Img";
 import Lightbox from "./Lightbox";
 
@@ -16,16 +15,17 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
   const [paused, setPaused] = useState(false);
   const intervalRef = useRef(null);
 
-  const images = p.images && p.images.length ? p.images : [p.image];
+  // Use image_url from the API, with fallbacks
+  const images = p.images && p.images.length ? p.images : [p.image_url || p.image];
 
   useEffect(() => {
     // autoplay every 3s
-    if (paused) return;
+    if (paused || !images || images.length <= 1) return;
     intervalRef.current = setInterval(() => {
       setIndex((i) => (i + 1) % images.length);
     }, 3000);
     return () => clearInterval(intervalRef.current);
-  }, [images.length, paused]);
+  }, [images, images.length, paused]);
 
   function goPrev(e) {
     e && e.preventDefault();
@@ -47,7 +47,7 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
         <div className="w-full h-40 sm:h-44 lg:h-36 bg-black/20 overflow-hidden relative">
           {images.map((src, i) => (
             <div
-              key={src}
+              key={src || i}
               role="button"
               tabIndex={0}
               onClick={() => onOpenLightbox && onOpenLightbox(images, i, p.title)}
@@ -69,7 +69,6 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
             </div>
           ))}
 
-          {/* Prev / Next controls (visible on hover) */}
           {images.length > 1 && (
             <>
               <button
@@ -103,7 +102,6 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
             </>
           )}
 
-          {/* info button - navigate to project details */}
           <button
             onClick={() => {
               const slug = p.slug || p.id;
@@ -112,13 +110,14 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
             aria-label={`Open full details for ${p.title}`}
             className="absolute right-2 top-2 z-20 rounded-full bg-black/40 p-1 text-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
           >
-            ℹ️
+            
           </button>
         </div>
 
         <div className="p-4 max-h-52 sm:max-h-60 overflow-auto content-area">
           <h3 className="font-semibold text-lg">{p.title}</h3>
-          <p className="mt-2 text-sm">{formatTextWithNumbers(p.caseStudy || p.designUseCase || p.desc)}</p>
+          {/* Use summary from the API, with fallback to description */}
+          <p className="mt-2 text-sm">{formatTextWithNumbers(p.summary || p.description)}</p>
         </div>
       </div>
 
@@ -136,32 +135,55 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
 }
 
 export default function MyWork() {
+  const [allProjects, setAllProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [active, setActive] = useState("all");
   const [showMore, setShowMore] = useState(false);
   const [modalProject, setModalProject] = useState(null);
   const [modalIndex, setModalIndex] = useState(0);
-  const [lightbox, setLightbox] = useState(null); // { images, startIndex, title }
+  const [lightbox, setLightbox] = useState(null);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/projects/`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setAllProjects(data);
+      } catch (e) {
+        setError(e.message);
+        console.error("Failed to fetch projects:", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProjects();
+  }, []);
 
   const visibleProjects = useMemo(() => {
-    const list = ALL_PROJECTS.filter((p) =>
-      active === "all" ? true : p.category === active
+    // Use the new 'allProjects' state which is populated from the API
+    const list = allProjects.filter((p) =>
+      active === "all" ? true : p.categories.includes(active) // Assuming categories is an array of strings
     );
     if (!showMore) {
-      // show first 6 when showing all, otherwise show first 2 for a filtered category
       return active === "all" ? list.slice(0, 6) : list.slice(0, 2);
     }
     return list;
-  }, [active, showMore]);
+  }, [active, showMore, allProjects]);
 
-  // lock body scroll and add keyboard handlers when modal is open
   useEffect(() => {
     function onKey(e) {
       if (!modalProject) return;
       if (e.key === "Escape") setModalProject(null);
       if (e.key === "ArrowLeft")
-        setModalIndex((m) => (m - 1 + modalProject.images.length) % modalProject.images.length);
+        setModalIndex((m) => (m - 1 + (modalProject.images?.length || 1)) % (modalProject.images?.length || 1));
       if (e.key === "ArrowRight")
-        setModalIndex((m) => (m + 1) % modalProject.images.length);
+        setModalIndex((m) => (m + 1) % (modalProject.images?.length || 1));
     }
     if (modalProject) {
       document.body.style.overflow = "hidden";
@@ -173,7 +195,6 @@ export default function MyWork() {
     };
   }, [modalProject]);
 
-  // lock body scroll when lightbox is open
   useEffect(() => {
     if (lightbox) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
@@ -271,25 +292,35 @@ export default function MyWork() {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleProjects.map((p) => (
-            <ProjectCard
-              key={p.id}
-              p={p}
-              onOpen={(proj) => {
-                setModalProject(proj);
-                setModalIndex(0);
-              }}
-              onOpenLightbox={(images, startIndex, title) => setLightbox({ images, startIndex, title })}
-            />
-          ))}
-        </div>
+        {/* Add loading and error handling */}
+        {loading && <div className="text-center py-10">Loading projects...</div>}
+        {error && <div className="text-center py-10 text-red-500">Error fetching projects: {error}</div>}
+        
+        {!loading && !error && (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visibleProjects.map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  p={p}
+                  onOpen={(proj) => {
+                    setModalProject(proj);
+                    setModalIndex(0);
+                  }}
+                  onOpenLightbox={(images, startIndex, title) => setLightbox({ images, startIndex, title })}
+                />
+              ))}
+            </div>
 
-        <div className="mt-8 flex items-center justify-center gap-4">
-          <button onClick={() => setShowMore((s) => !s)} className="px-5 py-2 rounded-md font-semibold transition btn-accent">
-            {showMore ? "Show less" : "Show more"}
-          </button>
-        </div>
+            {allProjects.length > 6 && (
+              <div className="mt-8 flex items-center justify-center gap-4">
+                <button onClick={() => setShowMore((s) => !s)} className="px-5 py-2 rounded-md font-semibold transition btn-accent">
+                  {showMore ? "Show less" : "Show more"}
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Modal for project details */}
@@ -309,14 +340,14 @@ export default function MyWork() {
             </button>
 
             <div className="w-full h-64 sm:h-80 bg-black/20 relative">
-              {modalProject.images.map((src, i) => (
+              {(modalProject.images || [modalProject.image_url]).map((src, i) => (
                 <div
-                  key={src}
+                  key={src || i}
                   role="button"
                   tabIndex={0}
-                  onClick={() => setLightbox({ images: modalProject.images, startIndex: i, title: modalProject.title })}
+                  onClick={() => setLightbox({ images: modalProject.images || [modalProject.image_url], startIndex: i, title: modalProject.title })}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") setLightbox({ images: modalProject.images, startIndex: i, title: modalProject.title });
+                    if (e.key === "Enter") setLightbox({ images: modalProject.images || [modalProject.image_url], startIndex: i, title: modalProject.title });
                   }}
                   aria-label={`Open full image ${i + 1} for ${modalProject.title}`}
                   className={`absolute inset-0 block w-full h-full transition-opacity duration-500 ${i === modalIndex ? "opacity-100" : "opacity-0"} cursor-zoom-in`}
@@ -328,7 +359,7 @@ export default function MyWork() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setModalIndex((m) => (m - 1 + modalProject.images.length) % modalProject.images.length);
+                  setModalIndex((m) => (m - 1 + (modalProject.images?.length || 1)) % (modalProject.images?.length || 1));
                 }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-2"
                 aria-label="Previous image"
@@ -338,7 +369,7 @@ export default function MyWork() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setModalIndex((m) => (m + 1) % modalProject.images.length);
+                  setModalIndex((m) => (m + 1) % (modalProject.images?.length || 1));
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-black/40 p-2"
                 aria-label="Next image"
@@ -349,11 +380,14 @@ export default function MyWork() {
 
             <div className="p-6">
               <h3 className="text-2xl font-bold">{modalProject.title}</h3>
-              <p className="mt-3 text-sm">{modalProject.caseStudy || modalProject.designUseCase || modalProject.desc}</p>
+              <p className="mt-3 text-sm">{modalProject.summary || modalProject.description}</p>
 
               <div className="mt-6 flex items-center gap-3">
-                <a href={modalProject.frontendLive || modalProject.link || modalProject.backendLive || "#"} target="_blank" rel="noreferrer" className="px-4 py-2 rounded btn-accent">
+                <a href={modalProject.live_link || "#"} target="_blank" rel="noreferrer" className="px-4 py-2 rounded btn-accent">
                   Open Live
+                </a>
+                <a href={modalProject.repo_link || "#"} target="_blank" rel="noreferrer" className="px-4 py-2 rounded bg-black/20 ml-2">
+                  View Code
                 </a>
                 <button onClick={() => { const slug = modalProject.slug || modalProject.id; window.location.hash = `project-${slug}`; }} className="px-4 py-2 rounded bg-black/20 ml-2">
                   Full details
