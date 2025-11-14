@@ -17,11 +17,16 @@ export const getProject = async (slug) => {
 };
 
 export const getBlogPosts = async () => {
-  const response = await fetch(`${API_BASE_URL}/blog-posts/`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch blog posts");
+  try {
+    const response = await fetch(`${API_BASE_URL}/blog-posts/`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch blog posts: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Blog posts fetch error:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const getBlogPost = async (slug) => {

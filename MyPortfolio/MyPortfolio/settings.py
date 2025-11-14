@@ -14,12 +14,9 @@ from pathlib import Path
 
 import dj_database_url
 from decouple import config
-# ...
-SECRET_KEY = config('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -31,9 +28,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='BinaryBlade24.pythonanywhere.com,127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')])
-
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='BinaryBlade24.pythonanywhere.com,127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')])
-
 
 # Application definition
 
@@ -80,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MyPortfolio.wsgi.application'
 
-
 # Production Security Settings
 # https://docs.djangoproject.com/en/5.2/topics/security/
 if config('DJANGO_ENV', default='development') == 'production':
@@ -92,8 +85,6 @@ if config('DJANGO_ENV', default='development') == 'production':
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
-
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -102,7 +93,6 @@ DATABASES = {
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -122,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -133,7 +122,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -156,13 +144,18 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
 # CORS settings
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:5173,http://localhost:3000,https://morest-burawa-podifolio.vercel.app,https://binaryblade24.pythonanywhere.com',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'morest-burawa-podifolio-rho.vercel.app',
+    'https://morest-burawa-podifolio.vercel.app',
+    'https://morest-burawa.netlify.app',
+    'https://morest-burawa-podifolio-fznm9li3l-morests-projects-b38edb5b.vercel.app',
+    'https://binaryblade24.pythonanywhere.com',
+    'https://morest-burawa-podifolio-8qy83esa7-morests-projects-b38edb5b.vercel.app',
+]
+
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -171,6 +164,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
