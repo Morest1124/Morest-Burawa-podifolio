@@ -144,17 +144,8 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'morest-burawa-podifolio-rho.vercel.app',
-    'https://morest-burawa-podifolio.vercel.app',
-    'https://morest-burawa.netlify.app',
-    'https://morest-burawa-podifolio-fznm9li3l-morests-projects-b38edb5b.vercel.app',
-    'https://binaryblade24.pythonanywhere.com',
-    'https://morest-burawa-podifolio-8qy83esa7-morests-projects-b38edb5b.vercel.app',
-]
+# CORS settings - Allow all origins for public API
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     'DELETE',
