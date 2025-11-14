@@ -1,39 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { getProjectByIdOrSlug } from "../data/projects";
 import Img from "./Img";
 
-export default function ProjectDetail({ initialIdOrSlug } = {}) {
+export default function ProjectDetail() {
   const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    function resolveFromHash() {
-      const h = window.location.hash || "";
-      // expected formats: #project-<idOrSlug>
-      if (h.startsWith("#project-")) {
-        const idOrSlug = h.replace("#project-", "");
-        const p = getProjectByIdOrSlug(idOrSlug);
-        setProject(p);
-      } else if (initialIdOrSlug) {
-        setProject(getProjectByIdOrSlug(initialIdOrSlug));
-      } else {
+    async function fetchProjectDetails() {
+      const hash = window.location.hash || "";
+      if (!hash.startsWith("#project-")) {
+        setLoading(false);
         setProject(null);
+        return;
+      }
+
+      const idOrSlug = hash.replace("#project-", "");
+      setLoading(true);
+      setError(null);
+
+      try {
+        const apiUrl = `https://binaryblade24.pythonanywhere.com/api/projects/${idOrSlug}/`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`Project not found or API error (status: ${response.status})`);
+        }
+        const data = await response.json();
+        setProject(data);
+      } catch (e) {
+        setError(e.message);
+        console.error("Failed to fetch project details:", e);
+        setProject(null);
+      } finally {
+        setLoading(false);
       }
     }
 
-    resolveFromHash();
-    window.addEventListener("hashchange", resolveFromHash);
-    return () => window.removeEventListener("hashchange", resolveFromHash);
-  }, [initialIdOrSlug]);
+    fetchProjectDetails();
+    window.addEventListener("hashchange", fetchProjectDetails);
+    return () => window.removeEventListener("hashchange", fetchProjectDetails);
+  }, []);
 
-  if (!project)
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold">Loading Project...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !project) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Project not found</h2>
-          <p className="mt-2 text-sm text-gray-400">Try selecting a project from My Work.</p>
+          <p className="mt-2 text-sm text-gray-400">
+            {error ? `Error: ${error}` : "Try selecting a project from My Work."}
+          </p>
         </div>
       </div>
     );
+  }
 
   return (
     <div className="min-h-screen p-6 bg-black/40">

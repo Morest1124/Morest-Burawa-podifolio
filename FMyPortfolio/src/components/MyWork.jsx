@@ -148,7 +148,7 @@ export default function MyWork() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/projects/`;
+        const apiUrl = `https://binaryblade24.pythonanywhere.com/api/projects/`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
