@@ -36,9 +36,9 @@ export default function About() {
     const fetchData = async () => {
       try {
         const [aboutRes, workRes, skillsRes] = await Promise.all([
-          fetch("https://binaryblade24.pythonanywhere.com/api/about/"),
-          fetch("https://binaryblade24.pythonanywhere.com/api/work-experience/"),
-          fetch("https://binaryblade24.pythonanywhere.com/api/skills/"),
+          fetch("https://BinaryBlade24.pythonanywhere.com/api/about/"),
+          fetch("https://BinaryBlade24.pythonanywhere.com/api/work-experience/"),
+          fetch("https://BinaryBlade24.pythonanywhere.com/api/skills/"),
         ]);
 
         if (!aboutRes.ok || !workRes.ok || !skillsRes.ok) {
