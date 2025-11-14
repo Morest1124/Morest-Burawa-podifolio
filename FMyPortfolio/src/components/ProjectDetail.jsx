@@ -68,9 +68,15 @@ export default function ProjectDetail() {
     <div className="min-h-screen p-6 bg-black/40">
       <div className="max-w-5xl mx-auto bg-gray-900 border border-accent rounded-lg overflow-hidden">
         <div className="w-full h-64 sm:h-80 bg-black/20 relative">
-          {project.images.map((src, i) => (
-            <Img key={src} src={src} alt={`${project.title} ${i + 1}`} className="w-full h-full object-cover absolute inset-0" />
-          ))}
+          {projectImages.length > 0 ? (
+            projectImages.map((src, i) => (
+              <Img key={src || i} src={src} alt={`${project.title} ${i + 1}`} className="w-full h-full object-cover absolute inset-0" />
+            ))
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-800">
+              <p>No image available</p>
+            </div>
+          )}
         </div>
 
         <div className="p-6">
@@ -78,18 +84,18 @@ export default function ProjectDetail() {
             <div>
               <h1 className="text-3xl font-bold">{project.title}</h1>
               <div className="mt-2 text-sm text-gray-400">
-                {project.tech.join(" • ")} — {project.year}
+                {(project.technologies?.map(t => t.name) || []).join(" • ")}
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {project.frontendLive && (
-                <a href={project.frontendLive} target="_blank" rel="noreferrer" className="btn-accent px-4 py-2 rounded">
-                  Front-end Live
+              {project.live_link && (
+                <a href={project.live_link} target="_blank" rel="noreferrer" className="btn-accent px-4 py-2 rounded">
+                  Live Demo
                 </a>
               )}
-              {project.backendLive && (
-                <a href={project.backendLive} target="_blank" rel="noreferrer" className="px-4 py-2 rounded bg-black/20">
-                  Back-end Live
+              {project.repo_link && (
+                <a href={project.repo_link} target="_blank" rel="noreferrer" className="px-4 py-2 rounded bg-black/20">
+                  View Code
                 </a>
               )}
             </div>
@@ -98,34 +104,33 @@ export default function ProjectDetail() {
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <h3 className="text-xl font-semibold">Overview</h3>
-              <p className="mt-2 text-sm text-gray-300">{project.desc}</p>
+              <p className="mt-2 text-sm text-gray-300">{project.description}</p>
 
-              <h4 className="mt-4 font-semibold">Case Study</h4>
-              <div className="mt-2 prose prose-invert max-w-none text-sm">
-                {project.caseStudy}
-              </div>
+              {project.problem_solved && (
+                <>
+                  <h4 className="mt-4 font-semibold">Problem Solved</h4>
+                  <p className="mt-2 text-sm text-gray-300">{project.problem_solved}</p>
+                </>
+              )}
             </div>
 
             <aside className="bg-black/10 p-4 rounded">
-              <h4 className="font-semibold">Design Use Case</h4>
-              <p className="mt-2 text-sm text-gray-300">{project.designUseCase}</p>
+              <h4 className="font-semibold">My Role</h4>
+              <p className="mt-2 text-sm text-gray-300">{project.my_role}</p>
 
-              <h4 className="mt-4 font-semibold">Tech</h4>
+              <h4 className="mt-4 font-semibold">Technologies</h4>
               <div className="mt-2 flex flex-wrap gap-2">
-                {project.tech.map((t) => (
-                  <span key={t} className="text-xs px-2 py-1 rounded bg-gray-800">
-                    {t}
+                {(project.technologies?.map(t => t.name) || []).map((name) => (
+                  <span key={name} className="text-xs px-2 py-1 rounded bg-gray-800">
+                    {name}
                   </span>
                 ))}
               </div>
 
               <div className="mt-6">
-                <button
-                  onClick={() => (window.location.hash = "#mywork")}
-                  className="px-3 py-2 rounded btn-accent"
-                >
+                <a href="#mywork" className="px-3 py-2 rounded btn-accent">
                   Back to My Work
-                </button>
+                </a>
               </div>
             </aside>
           </div>

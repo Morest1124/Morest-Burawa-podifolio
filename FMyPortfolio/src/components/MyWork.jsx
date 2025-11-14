@@ -134,11 +134,7 @@ function ProjectCard({ p, onOpen, onOpenLightbox }) {
   );
 }
 
-export default function MyWork() {
-  const [allProjects, setAllProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+export default function MyWork({ allProjects, loading, error }) {
   const [active, setActive] = useState("all");
   const [showMore, setShowMore] = useState(false);
   const [modalProject, setModalProject] = useState(null);
