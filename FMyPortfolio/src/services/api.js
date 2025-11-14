@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
 
 export const getProjects = async () => {
   const response = await fetch(`${API_BASE_URL}/projects/`);
