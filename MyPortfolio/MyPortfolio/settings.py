@@ -158,12 +158,11 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://morest-burawa-podifolio.vercel.app',
-    'https://binaryblade24.pythonanywhere.com',
-]
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:5173,http://localhost:3000,https://morest-burawa-podifolio.vercel.app,https://binaryblade24.pythonanywhere.com',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
