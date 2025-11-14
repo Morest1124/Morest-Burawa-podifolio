@@ -1,19 +1,34 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'https://binaryblade24.pythonanywhere.com/api';
+
+console.log('API_BASE_URL:', API_BASE_URL);
 
 export const getProjects = async () => {
-  const response = await fetch(`${API_BASE_URL}/projects/`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch projects");
+  try {
+    const url = `${API_BASE_URL}/projects/`;
+    console.log('Fetching projects from:', url);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Projects fetch error:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const getProject = async (slug) => {
-  const response = await fetch(`${API_BASE_URL}/projects/${slug}/`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch project");
+  try {
+    const url = `${API_BASE_URL}/projects/${slug}/`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch project: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Project fetch error:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const getBlogPosts = async () => {
@@ -30,9 +45,15 @@ export const getBlogPosts = async () => {
 };
 
 export const getBlogPost = async (slug) => {
-  const response = await fetch(`${API_BASE_URL}/blog-posts/${slug}/`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch blog post");
+  try {
+    const url = `${API_BASE_URL}/blog-posts/${slug}/`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch blog post: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Blog post fetch error:', error);
+    throw error;
   }
-  return response.json();
 };
