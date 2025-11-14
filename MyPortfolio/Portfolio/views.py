@@ -36,10 +36,17 @@ class ProjectListCreateView(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+class ProjectDetailView(generics.RetrieveAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    lookup_field = 'slug'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
 class WorkExperienceListCreateView(generics.ListCreateAPIView):
     queryset = WorkExperience.objects.all()
     serializer_class = WorkExperienceSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
 
 class CertificationAwardListCreateView(generics.ListCreateAPIView):
     queryset = CertificationAward.objects.all()
@@ -56,9 +63,16 @@ class BlogPostListCreateView(generics.ListCreateAPIView):
     serializer_class = BlogPostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+class BlogPostDetailView(generics.RetrieveAPIView):
+    queryset = BlogPost.objects.all()
+    serializer_class = BlogPostSerializer
+    lookup_field = 'slug'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
 class GithubStatsListCreateView(generics.ListCreateAPIView):
     queryset = GithubStats.objects.all()
     serializer_class = GithubStatsSerializer
+
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 from django.core.mail import send_mail
