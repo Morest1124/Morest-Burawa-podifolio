@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import About from "./components/About";
 import Services from "./components/Services";
@@ -14,37 +14,11 @@ import back from "./assets/back.jpg";
 import codeVideo from "./assets/code.mp4";
 
 function App() {
-  const [bgMode, setBgMode] = useState("picture");
-  const [bgVideo, setBgVideo] = useState(false);
-  const [showAnnotation, setShowAnnotation] = useState(false);
+  const [bgMode, setBgMode] = React.useState("picture");
+  const [bgVideo, setBgVideo] = React.useState(false);
+  const [showAnnotation, setShowAnnotation] = React.useState(false);
 
-  // State for projects, lifted up
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch projects once in the main App component
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const apiUrl = "https://BinaryBlade24.pythonanywhere.com/api/projects/";
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setProjects(data);
-      } catch (e) {
-        setError(e.message);
-        console.error("Failed to fetch projects:", e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProjects();
-  }, []);
-
-  useEffect(() => {
+  React.useEffect(() => {
     const hasSeenAnnotation = sessionStorage.getItem('hasSeenAnnotation');
     if (!hasSeenAnnotation) {
         setShowAnnotation(true);
@@ -56,7 +30,7 @@ function App() {
       setShowAnnotation(false);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     try {
       const m = localStorage.getItem("bgMode");
       const v = localStorage.getItem("bgVideo");
@@ -106,6 +80,10 @@ function App() {
       )}
       <Navbar />
       <CodeBackground />
+      {/* Background controls (picture vs black and optional video) */}
+      {/* BackgroundToggle is rendered inside the Navbar so we listen for bgChange events */}
+
+      {/* Render background according to user settings */}
       {bgMode === "picture" && (
         <>
           {bgVideo ? (
@@ -129,10 +107,11 @@ function App() {
         <div className="bg-black-layer fixed inset-0 -z-10 bg-black" />
       )}
       <main className="font-grotesk">
+        {/* If the hash is pointing to a project detail, render the detail page above sections */}
         {typeof window !== "undefined" &&
           window.location.hash.startsWith("#project-") && (
             <section id="project-detail" className="min-h-screen">
-              <ProjectDetail projects={projects} />
+              <ProjectDetail />
             </section>
           )}
         <section id="services">
@@ -142,7 +121,7 @@ function App() {
           <About />
         </section>
         <section id="mywork">
-          <MyWork allProjects={projects} loading={loading} error={error} />
+          <MyWork />
         </section>
         <section id="contacts">
           <Contacts />

@@ -46,7 +46,7 @@ export default function Contacts() {
     e.preventDefault();
     setStatus("submitting");
     try {
-      const response = await fetch(`https://BinaryBlade24.pythonanywhere.com/api/contact-submissions/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
