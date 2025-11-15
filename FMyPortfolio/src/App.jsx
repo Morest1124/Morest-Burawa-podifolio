@@ -4,6 +4,7 @@ import About from "./components/About";
 import Services from "./components/Services";
 import Contacts from "./components/Contacts";
 import MyWork from "./components/MyWork";
+import GitHubProjects from "./components/GitHubProjects";
 import Blog from "./components/Blog";
 import ProjectDetail from "./components/ProjectDetail";
 import CodeBackground from "./components/CodeBackground";
@@ -122,6 +123,9 @@ function App() {
         </section>
         <section id="mywork">
           <MyWork />
+        </section>
+        <section id="github-projects">
+          <GitHubProjects />
         </section>
         <section id="contacts">
           <Contacts />
