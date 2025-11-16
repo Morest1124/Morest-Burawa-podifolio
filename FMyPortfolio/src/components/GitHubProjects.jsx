@@ -50,7 +50,7 @@ const GitHubProjects = () => {
     const fetchRepos = async () => {
       setLoading(true);
       setError(null);
-      const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=''`;
+      const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&direction=desc`;
 
       try {
         const response = await fetch(apiUrl, {
